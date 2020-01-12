@@ -4,20 +4,24 @@ import './App.css';
 
 function App() {
   const [profile, setProfile] = useState({})
-  window.liff.init()
-    .then(() => {
-      // TODO: implement this
-      console.log('success')
+  window.liff.init({ liffId: '1653759867-VlNaGEJ9' })
+    .then(async () => {
+      if (!window.liff.isLoggedIn()) {
+        window.liff.login();
+      }
     })
-    .catch((error) => {
-      // TODO: implement this
-      console.error(error)
-    })
+    .catch((err) => {
+      console.log(err)
+    });
 
-    const getProfileFromLine = async () => {
-      const dataInfo = await window.liff.getProfile()
-      setProfile(dataInfo)
-    }
+  const getProfileFromLine = async () => {
+    const dataInfo = await window.liff.getProfile()
+    setProfile(dataInfo)
+  }
+
+  const closeWindow = () => {
+    window.liff.closeWindow()
+  }
 
 
   return (
@@ -25,13 +29,19 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Profile: { JSON.stringify(profile) }
+          Profile: {JSON.stringify(profile)}
         </p>
         <button
           className="App-link"
           onClick={getProfileFromLine}
         >
           Get Profile
+        </button>
+        <button
+          className="App-link"
+          onClick={closeWindow}
+        >
+          Close Window
         </button>
       </header>
     </div>
